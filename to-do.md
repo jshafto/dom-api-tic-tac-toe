@@ -37,7 +37,7 @@
     - [x] Enable the 'Give Up" button.
 
 ## Requirement 6: Saving Game State
-- [ ] If someone refreshes the screen, the game state will be restored when the page shows back up.
+- [x] If someone refreshes the screen, the game state will be restored when the page shows back up.
 
 ## Bonus Requirement: Make The Computer Play
 - [ ] When you click "New Game", randomly assign the computer as Player X or Player O. Then, have the computer play automatically in response to its turn.

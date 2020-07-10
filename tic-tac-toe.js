@@ -3,6 +3,10 @@ window.addEventListener("DOMContentLoaded", event => {
     let currentPlayer = "X";
     let currBoard = ["", "", "", "", "", "", "", "", ""];
     let gameState = null;
+    let header = document.getElementById("game-status");
+    let gameButton = document.getElementById("new-game");
+    gameButton.disabled = true;
+    let giveUp = document.getElementById("give-up");
     // check local storage for currentPlayer, currBoard, gameState
     // if they're in local storage, initialize values to the
     // values that are in local storage
@@ -13,8 +17,40 @@ window.addEventListener("DOMContentLoaded", event => {
         gameState = JSON.parse(localStorage.getItem("gameState"));
     }
 
-    //
+    let updateBoard = (currentPlayer, currBoard, gameState) => {
+        // right now we're changing one image based on what
+        // the latest click was
 
+        // instead we should update all squares with a for loop
+        currBoard.forEach( (el, ind) => {
+            // getElementByID
+            // id is gonna be "square-"
+
+            let targSquare = document.getElementById(`square-${ind}`);
+            if (targSquare.innerHTML === "") {
+                let mark = document.createElement("img");
+                if (el === "X") {
+                    mark.setAttribute("src", "player-X.svg");
+                    targSquare.appendChild(mark);
+                } else if (el === "O"){
+                    mark.setAttribute("src", "player-O.svg");
+                    targSquare.appendChild(mark);
+                }
+            }
+        })
+
+        // if the game state is not null
+        // update header to `Winner: ${gameState}`
+        if (gameState) {
+            header.innerHTML = `Winner: ${gameState}`;
+            giveUp.disabled = true;
+            gameButton.disabled = false;
+        }
+
+
+    }
+    //
+    updateBoard(currentPlayer, currBoard, gameState);
     // everytime we update internal game state (which includes
     // currBoard, gameState, and currentPlayer), we also need to
     // update local storage
@@ -24,22 +60,20 @@ window.addEventListener("DOMContentLoaded", event => {
     //     gameState
     //     // update localstorage to have these new values
     // ]
-    let updateStorage = (currentPlayer, currBoard, gameState) {
+
+    // write a function updateStorage that stores current game state
+    // variables into localStorage
+    let updateStorage = (currentPlayer, currBoard, gameState) => {
         localStorage.setItem("currentPlayer", currentPlayer);
         localStorage.setItem("currBoard", JSON.stringify(currBoard));
         localStorage.setItem("gameState", JSON.stringify(gameState));
     }
 
-    // write a function updateStorage that stores current game state
-    // variables into localStorage
+    //Use updateStorage function whenever we update internal state
 
 
 
     // make array
-    let header = document.getElementById("game-status");
-    let gameButton = document.getElementById("new-game");
-    gameButton.disabled = true;
-    let giveUp = document.getElementById("give-up");
 
     let checkForWin = (boardState, currPlayer) => {
         // check for all columns
@@ -95,9 +129,10 @@ window.addEventListener("DOMContentLoaded", event => {
         // disable newGame button
         gameButton.disabled = true;
         giveUp.disabled = false;
-        return;
         localStorage.clear();
+        return;
     }
+
 
 
     // listen for any click on the board element
@@ -106,28 +141,22 @@ window.addEventListener("DOMContentLoaded", event => {
         let targSquare = event.target;
         let squareNum = Number(targSquare.id.replace("square-", ""));
         if (gameState) {
+
             return;
         }
-        // if the click is on an empty stare
-        if (targSquare.classList.contains("square") && !targSquare.classList.contains("taken")) {
-            currBoard[squareNum] = currentPlayer;
-            let mark = document.createElement("img");
-            // console.log(squareNum);
-            // console.log(currBoard);
-            if (currentPlayer === "X") {
-                mark.setAttribute("src", "player-x.svg");
-                targSquare.appendChild(mark);
-                // currentPlayer = 'O';
-                // change internal array
-            } else {
-                mark.setAttribute("src", "player-o.svg");
-                targSquare.appendChild(mark);
-                // currentPlayer = 'X';
 
-                // change internal array
-            }
-            targSquare.classList.add("taken");
+        // if the click took place on a square that corresponds with an
+        // empty space in the internal state (currBoard)
+            // update internal state
+        if (targSquare.classList.contains("square") && (currBoard[squareNum]==="")) {
+            currBoard[squareNum] = currentPlayer;
+            // call function that updates DOM based on internal state
+                // move code from if statements below to own function
+            updateBoard(currentPlayer, currBoard, gameState);
+            // update local storage with updateStorage function
         }
+
+
 
         // checks state of internal array to see if a win has occurred
         gameState = checkForWin(currBoard, currentPlayer);
@@ -138,7 +167,9 @@ window.addEventListener("DOMContentLoaded", event => {
             // enable newGame button
             gameButton.disabled = false;
             giveUp.disabled = true;
+            updateStorage(currentPlayer, currBoard, gameState);
             return;
+
         }
 
         // update player
@@ -147,6 +178,7 @@ window.addEventListener("DOMContentLoaded", event => {
         } else {
             currentPlayer = 'O';
         }
+        updateStorage(currentPlayer, currBoard, gameState);
 
     })
 
@@ -179,6 +211,8 @@ window.addEventListener("DOMContentLoaded", event => {
         giveUp.disabled = true;
         // enable game button
         gameButton.disabled = false;
+
+        updateStorage(currentPlayer, currBoard, gameState);
 
 
     })
