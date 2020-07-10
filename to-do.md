@@ -18,14 +18,14 @@
     - [x] Empty squares in the grid no longer react to clicks
 
 ## Requirement 4: Creating A New Game
-- [ ] When the game status is not "won" or "tied", then the "New Game" button is disabled.
-- [ ] When the game status is "won" or "tied", then the "New Game" button is enabled.
+- [x] When the game status is not "won" or "tied", then the "New Game" button is disabled.
+- [x] When the game status is "won" or "tied", then the "New Game" button is enabled.
 - When a player clicks the "New Game" button, then it
-    - [ ] clears the game status,
-    - [ ] clears the header,
-    - [ ] clears the board, and
-    - [ ] makes it so the next click of the tic-tac-toe board is an "X"
-    - [ ] disables the "New Game" button
+    - [x] clears the game status,
+    - [x] clears the header,
+    - [x] clears the board, and
+    - [x] makes it so the next click of the tic-tac-toe board is an "X"
+    - [x] disables the "New Game" button
 
 ## Requirement 5: Giving Up
 - When a player clicks the "Give Up" button:

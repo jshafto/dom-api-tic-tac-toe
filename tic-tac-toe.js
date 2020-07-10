@@ -3,9 +3,13 @@ window.addEventListener("DOMContentLoaded", event => {
     let currentPlayer = "X";
     // make array
     let currBoard = ["", "", "", "", "", "", "", "", ""];
+    let gameState = null;
+    let header = document.getElementById("game-status");
+    let gameButton = document.getElementById("new-game");
+    gameButton.disabled = true;
+    let giveUp = document.getElementById("give-up");
 
-
-    let checkForWin =  (boardState, currPlayer) => {
+    let checkForWin = (boardState, currPlayer) => {
         // check for all columns
         for (let i = 0; i < 9; i += 3) {
             if (boardState[i] !== "" &&
@@ -45,8 +49,29 @@ window.addEventListener("DOMContentLoaded", event => {
         }
         return null;
     }
-    let gameState = null;
+
+
+    let newGame = () => {
+        // clear the boardState
+        currBoard = ["", "", "", "", "", "", "", "", ""];
+        // gameState to null
+        gameState = null;
+        // current player to X
+        currentPlayer = 'X';
+        // clear the header
+        header.innerHTML = '';
+        // disable newGame button
+        gameButton.disabled = true;
+
+        // clear the actual board
+
+
+        return;
+    }
+
+
     // listen for any click on the board element
+
     board.addEventListener("click", event => {
         let targSquare = event.target;
         let squareNum = Number(targSquare.id.replace("square-", ""));
@@ -78,7 +103,11 @@ window.addEventListener("DOMContentLoaded", event => {
         gameState = checkForWin(currBoard, currentPlayer);
         if(gameState) {
             // make H1 equal to `Winner: ${gameState}`
-            console.log(`Winner: ${gameState}`);
+
+            header.innerHTML = `Winner: ${gameState}`
+            // enable newGame button
+            gameButton.disabled = false;
+
             return;
         }
 
@@ -91,10 +120,19 @@ window.addEventListener("DOMContentLoaded", event => {
 
     })
 
+    // listen for a click on the new-game button
+    gameButton.addEventListener("click", (event) => {
+        // reset game internal state
+        newGame();
+        // reset HTML so that the board is back to the beginning
+        let squaresArray = [...board.children];
+        squaresArray.forEach(el => {
+            // console.log(el);
+            el.classList.remove("taken");
+            el.innerHTML = "";
+        })
 
-
-
-
+    })
 
 
 
