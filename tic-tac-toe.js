@@ -30,10 +30,10 @@ window.addEventListener("DOMContentLoaded", event => {
             if (targSquare.innerHTML === "") {
                 let mark = document.createElement("img");
                 if (el === "X") {
-                    mark.setAttribute("src", "player-X.svg");
+                    mark.setAttribute("src", "player-x.svg");
                     targSquare.appendChild(mark);
                 } else if (el === "O"){
-                    mark.setAttribute("src", "player-O.svg");
+                    mark.setAttribute("src", "player-o.svg");
                     targSquare.appendChild(mark);
                 }
             }
