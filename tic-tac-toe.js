@@ -1,9 +1,41 @@
 window.addEventListener("DOMContentLoaded", event => {
     let board = document.getElementById("tic-tac-toe-board");
     let currentPlayer = "X";
-    // make array
     let currBoard = ["", "", "", "", "", "", "", "", ""];
     let gameState = null;
+    // check local storage for currentPlayer, currBoard, gameState
+    // if they're in local storage, initialize values to the
+    // values that are in local storage
+    let state = localStorage.getItem("currentPlayer");
+    if (state) {
+        currentPlayer = localStorage.getItem("currentPlayer");
+        currBoard = JSON.parse(localStorage.getItem("currBoard"));
+        gameState = JSON.parse(localStorage.getItem("gameState"));
+    }
+
+    //
+
+    // everytime we update internal game state (which includes
+    // currBoard, gameState, and currentPlayer), we also need to
+    // update local storage
+    // let internalState = [
+    //     currentPlayer,
+    //     currBoard,
+    //     gameState
+    //     // update localstorage to have these new values
+    // ]
+    let updateStorage = (currentPlayer, currBoard, gameState) {
+        localStorage.setItem("currentPlayer", currentPlayer);
+        localStorage.setItem("currBoard", JSON.stringify(currBoard));
+        localStorage.setItem("gameState", JSON.stringify(gameState));
+    }
+
+    // write a function updateStorage that stores current game state
+    // variables into localStorage
+
+
+
+    // make array
     let header = document.getElementById("game-status");
     let gameButton = document.getElementById("new-game");
     gameButton.disabled = true;
@@ -62,11 +94,9 @@ window.addEventListener("DOMContentLoaded", event => {
         header.innerHTML = '';
         // disable newGame button
         gameButton.disabled = true;
-
-        // clear the actual board
-
-
+        giveUp.disabled = false;
         return;
+        localStorage.clear();
     }
 
 
@@ -107,7 +137,7 @@ window.addEventListener("DOMContentLoaded", event => {
             header.innerHTML = `Winner: ${gameState}`
             // enable newGame button
             gameButton.disabled = false;
-
+            giveUp.disabled = true;
             return;
         }
 
@@ -133,7 +163,25 @@ window.addEventListener("DOMContentLoaded", event => {
         })
 
     })
+    giveUp.addEventListener("click", (event) => {
 
+        // gameState it should equal whoever is not the current player
+        if (currentPlayer === "X") {
+            currentPlayer = 'O';
+        } else {
+            currentPlayer = 'X';
+        }
+        // change gameState
+        gameState = currentPlayer;
+        // update header
+        header.innerHTML = `Winner: ${currentPlayer}`;
+        // disable giveUp button
+        giveUp.disabled = true;
+        // enable game button
+        gameButton.disabled = false;
+
+
+    })
 
 
 

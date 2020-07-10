@@ -29,12 +29,12 @@
 
 ## Requirement 5: Giving Up
 - When a player clicks the "Give Up" button:
-    - [ ] Set the status of the game as "won" by the "other" player. That is, if "X" is the current player, when that player clicks the "Give Up" button, then "O" wins the game.
-    - [ ] Show the winner status as won by the "other" player.
-    - [ ] Disable the "Give Up" button.
-    - [ ] Enable the "New Game" button.
+    - [x] Set the status of the game as "won" by the "other" player. That is, if "X" is the current player, when that player clicks the "Give Up" button, then "O" wins the game.
+    - [x] Show the winner status as won by the "other" player.
+    - [x] Disable the "Give Up" button.
+    - [x] Enable the "New Game" button.
 - When a game is ongoing:
-    - [ ] Enable the 'Give Up" button.
+    - [x] Enable the 'Give Up" button.
 
 ## Requirement 6: Saving Game State
 - [ ] If someone refreshes the screen, the game state will be restored when the page shows back up.
