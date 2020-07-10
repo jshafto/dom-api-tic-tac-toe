@@ -1,5 +1,5 @@
 # Tic-Tac-Toe Project
-Tic-Tac-Toe project for App Academy. Implementation by Juliet Shafto and Clayton Reinhardt. Project status: all requirements fulfilled except that the AI always goes second (instead of randomly assigning the computer player).
+Tic-Tac-Toe project for App Academy. Implementation by Juliet Shafto and Clayton Reinhardt. Project status: all requirements fulfilled except that the AI always goes second (instead of randomly assigning the computer player). Computer chooses moves at random.
 
 Original project [here](https://github.com/appacademy-starters/dom-api-tic-tac-toe).
 
