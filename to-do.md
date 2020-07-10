@@ -11,11 +11,11 @@
 - [x] If a player has any three in a row, then that player wins.
 - [x] If a player has any three in a column, then that player wins.
 - [x] If a player has either of the diagonals, then that player wins.
-- [ ] If there is no win and all squares have a player symbol in there, then the game is a tie.
+- [x] If there is no win and all squares have a player symbol in there, then the game is a tie.
 - [x] When the game begins, the header at the top should have no text in it.
-- [ ] When a player wins the game, then the following happens:
-    - [ ] The header at the top should read "Winner: X" or "Winner: Y" depending on which player won.
-    - [ ] Empty squares in the grid no longer react to clicks
+- [x] When a player wins the game, then the following happens:
+    - [x] The header at the top should read "Winner: X" or "Winner: Y" depending on which player won.
+    - [x] Empty squares in the grid no longer react to clicks
 
 ## Requirement 4: Creating A New Game
 - [ ] When the game status is not "won" or "tied", then the "New Game" button is disabled.
