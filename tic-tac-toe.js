@@ -133,6 +133,44 @@ window.addEventListener("DOMContentLoaded", event => {
         return;
     }
 
+    let computerTurn = (currentPlayer, currBoard, gameState) => {
+        // get index of first empty element of currBoard
+
+        //console.log(currentPlayer);
+        if (!gameState) {
+            //let squareNum = currBoard.indexOf("");
+            // get an array that has the indices of all the empty string
+            // elements in currBoard
+            // choose a random number >= 0, and < empties.length
+            // let squareNum = empties.[randomNum];
+            let empties = currBoard.map( (el, ind) => {
+                if (el === "") return ind;
+                else return null;
+            }).filter((el) => (el!==null));
+            let randNum = Math.floor(Math.random()*empties.length);
+            console.log(empties);
+            let squareNum = empties[randNum];
+            currBoard[squareNum] = currentPlayer;
+            console.log(currentPlayer, currBoard, gameState);
+            updateBoard(currentPlayer, currBoard, gameState);
+            updateStorage(currentPlayer, currBoard, gameState);
+            // select next square and turn it into an O
+            // call updateBoard with internal state
+            // call updateStorage
+            //
+            gameState = checkForWin(currBoard, currentPlayer);
+            if (gameState) {
+                // make H1 equal to `Winner: ${gameState}`
+
+                header.innerHTML = `Winner: ${gameState}`
+                // enable newGame button
+                gameButton.disabled = false;
+                giveUp.disabled = true;
+                updateStorage(currentPlayer, currBoard, gameState);
+                return;
+            }
+        }
+    }
 
 
     // listen for any click on the board element
@@ -172,7 +210,15 @@ window.addEventListener("DOMContentLoaded", event => {
 
         }
 
-        // update player
+        // update player - switch current player
+        if (currentPlayer==='O') {
+            currentPlayer = 'X';
+        } else {
+            currentPlayer = 'O';
+        }
+        updateStorage(currentPlayer, currBoard, gameState);
+        computerTurn(currentPlayer, currBoard, gameState);
+        // update player - switch current player
         if (currentPlayer==='O') {
             currentPlayer = 'X';
         } else {
