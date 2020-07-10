@@ -1,5 +1,12 @@
 # Tic-Tac-Toe Project
 
+## Requirement 2: Tracking Grid Clicks
+- [x] For the "X" player, use the image found at https://assets.aaonline.io/Module-DOM-API/formative-project-tic-tac-toe/player-x.svg.
+- [x] For the "O" player, use the image found at https://assets.aaonline.io/Module-DOM-API/formative-project-tic-tac-toe/player-o.svg.
+- [x] When the player clicks an empty square, then it is filled with that player's symbol.
+- [x] When the player clicks a square that already contains a symbol, the game does nothing.
+- [x] The first click results in an "X". After that, the symbols "O" and "X" alternate with each click per the rules of tic-tac-toe.
+
 ## Requirement 3: Determining Game Status
 - [x] If a player has any three in a row, then that player wins.
 - [x] If a player has any three in a column, then that player wins.
