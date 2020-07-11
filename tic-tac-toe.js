@@ -7,6 +7,7 @@ window.addEventListener("DOMContentLoaded", event => {
     let gameButton = document.getElementById("new-game");
     gameButton.disabled = true;
     let giveUp = document.getElementById("give-up");
+    let compTurn = (Math.random()>.5);
     // check local storage for currentPlayer, currBoard, gameState
     // if they're in local storage, initialize values to the
     // values that are in local storage
@@ -15,6 +16,7 @@ window.addEventListener("DOMContentLoaded", event => {
         currentPlayer = localStorage.getItem("currentPlayer");
         currBoard = JSON.parse(localStorage.getItem("currBoard"));
         gameState = JSON.parse(localStorage.getItem("gameState"));
+        compTurn = JSON.parse(localStorage.getItem("compTurn"));
     }
 
     let updateBoard = (currentPlayer, currBoard, gameState) => {
@@ -47,10 +49,11 @@ window.addEventListener("DOMContentLoaded", event => {
     updateBoard(currentPlayer, currBoard, gameState);
 
     //  updateStorage that stores current game state variables into localStorage
-    let updateStorage = (currentPlayer, currBoard, gameState) => {
+    let updateStorage = (currentPlayer, currBoard, gameState, compTurn) => {
         localStorage.setItem("currentPlayer", currentPlayer);
         localStorage.setItem("currBoard", JSON.stringify(currBoard));
         localStorage.setItem("gameState", JSON.stringify(gameState));
+        localStorage.setItem("compTurn", JSON.stringify(compTurn));
     }
 
     let checkForWin = (boardState, currPlayer) => {
@@ -59,7 +62,7 @@ window.addEventListener("DOMContentLoaded", event => {
             if (boardState[i] !== "" &&
                 boardState[i] === boardState[i+1] &&
                 boardState[i] === boardState[i+2]) {
-                return currentPlayer;
+                return currPlayer;
             }
         }
         // check for all rows
@@ -67,20 +70,20 @@ window.addEventListener("DOMContentLoaded", event => {
             if (boardState[i] !== "" &&
                 boardState[i] === boardState[i+3] &&
                 boardState[i] === boardState[i+6]) {
-                return currentPlayer;
+                return currPlayer;
             }
         }
         // check for diag 1
         if (boardState[0] !== "" &&
             boardState[0] === boardState[4] &&
             boardState[0] === boardState[8]) {
-            return currentPlayer;
+            return currPlayer;
         }
         // check for diag 2
         if (boardState[2] !== "" &&
             boardState[2] === boardState[4] &&
             boardState[2] === boardState[6]) {
-            return currentPlayer;
+            return currPlayer;
         }
         // if all board squares are taken
         // return "None"
@@ -104,6 +107,8 @@ window.addEventListener("DOMContentLoaded", event => {
         currentPlayer = 'X';
         // clear the header
         header.innerHTML = '';
+        // reset computer turn
+        compTurn = (Math.random()>.5);
         // disable newGame button
         gameButton.disabled = true;
         giveUp.disabled = false;
@@ -127,44 +132,53 @@ window.addEventListener("DOMContentLoaded", event => {
 
             // select square and turn it into an O
             currBoard[squareNum] = currentPlayer;
-            console.log(currentPlayer, currBoard, gameState);
             // check for win
             gameState = checkForWin(currBoard, currentPlayer);
             // call updateBoard with internal state
             updateBoard(currentPlayer, currBoard, gameState);
-            // call updateStorage
-            updateStorage(currentPlayer, currBoard, gameState);
-            if (gameState) {
-                // make H1 equal to `Winner: ${gameState}`
-
-                header.innerHTML = `Winner: ${gameState}`
-                // enable newGame button
-                gameButton.disabled = false;
-                giveUp.disabled = true;
-                updateStorage(currentPlayer, currBoard, gameState);
-                return;
+            // update player after computer plays
+            if (currentPlayer==='O') {
+                currentPlayer = 'X';
+            } else {
+                currentPlayer = 'O';
             }
+            compTurn = false;
+            // and update storage to reflect the new player
+            updateStorage(currentPlayer, currBoard, gameState, compTurn);
         }
+        // return the new internal state
+        return [currentPlayer, currBoard, gameState];
     }
 
+    let humanTurn = (currentPlayer, currBoard, squareNum) => {
+        // if the click took place on a square that corresponds with an
+        // empty space in the internal state (currBoard)
+        if (currBoard[squareNum] === "" ) {
+            // update internal state
+            currBoard[squareNum] = currentPlayer;
+        }
+        return currBoard;
+
+    }
+
+    // if it's the computer's turn, take the turn before
+    if (compTurn) {
+        [currentPlayer, currBoard, gameState] = computerTurn(currentPlayer,currBoard,gameState);
+    }
 
     // listen for any click on the board element
 
     board.addEventListener("click", event => {
         let targSquare = event.target;
         let squareNum = Number(targSquare.id.replace("square-", ""));
-        // if the game has ended, ignore the click
-        if (gameState) {
+        // if the game has ended, or if the target isn't a square
+        // ignore the click
+        if (gameState || !targSquare.classList.contains("square")) {
             return;
         }
-        // if the click took place on a square that corresponds with an
-        // empty space in the internal state (currBoard)
-            // update internal state
-        if (targSquare.classList.contains("square") && (currBoard[squareNum]==="")) {
-            currBoard[squareNum] = currentPlayer;
-            // call function that updates DOM based on internal state
-            updateBoard(currentPlayer, currBoard, gameState);
-        }
+
+
+        currBoard = humanTurn(currentPlayer, currBoard, squareNum);
 
 
 
@@ -178,9 +192,10 @@ window.addEventListener("DOMContentLoaded", event => {
             // disable give up button
             giveUp.disabled = true;
             // update local storage
-            updateStorage(currentPlayer, currBoard, gameState);
-            return;
+            updateBoard(currentPlayer, currBoard, gameState);
+            updateStorage(currentPlayer, currBoard, gameState, compTurn);
 
+            return;
         }
 
         // update player - switch current player
@@ -189,20 +204,14 @@ window.addEventListener("DOMContentLoaded", event => {
         } else {
             currentPlayer = 'O';
         }
-        updateStorage(currentPlayer, currBoard, gameState);
+        updateBoard(currentPlayer, currBoard, gameState);
+        updateStorage(currentPlayer, currBoard, gameState, compTurn);
 
         // computer plays a turn after human player
-        computerTurn(currentPlayer, currBoard, gameState);
+        [currentPlayer, currBoard, gameState] = computerTurn(currentPlayer, currBoard, gameState);
 
 
-        // update player again after computer plays
-        if (currentPlayer==='O') {
-            currentPlayer = 'X';
-        } else {
-            currentPlayer = 'O';
-        }
-        // and update storage to reflect the new player
-        updateStorage(currentPlayer, currBoard, gameState);
+
 
     })
 
@@ -217,6 +226,10 @@ window.addEventListener("DOMContentLoaded", event => {
             el.classList.remove("taken");
             el.innerHTML = "";
         })
+        // if it's the computer's turn, play!
+        if (compTurn) {
+            [currentPlayer, currBoard, gameState] = computerTurn(currentPlayer,currBoard,gameState);
+        }
 
     })
 
@@ -237,6 +250,6 @@ window.addEventListener("DOMContentLoaded", event => {
         // enable game button
         gameButton.disabled = false;
         //update storage
-        updateStorage(currentPlayer, currBoard, gameState);
+        updateStorage(currentPlayer, currBoard, gameState, compTurn);
     })
 })
