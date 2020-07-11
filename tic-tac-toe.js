@@ -177,10 +177,11 @@ window.addEventListener("DOMContentLoaded", event => {
             return;
         }
 
+        // if click is on a taken squre, ignore click
+        if (currBoard[squareNum] !== "" ) return;
 
+        // update internal state of board to reflect human turn
         currBoard = humanTurn(currentPlayer, currBoard, squareNum);
-
-
 
         // checks state of internal array to see if a win has occurred
         gameState = checkForWin(currBoard, currentPlayer);
@@ -209,10 +210,6 @@ window.addEventListener("DOMContentLoaded", event => {
 
         // computer plays a turn after human player
         [currentPlayer, currBoard, gameState] = computerTurn(currentPlayer, currBoard, gameState);
-
-
-
-
     })
 
     // listen for a click on the new-game button
@@ -222,8 +219,6 @@ window.addEventListener("DOMContentLoaded", event => {
         // reset HTML so that the board is back to the beginning
         let squaresArray = [...board.children];
         squaresArray.forEach(el => {
-            // console.log(el);
-            el.classList.remove("taken");
             el.innerHTML = "";
         })
         // if it's the computer's turn, play!
